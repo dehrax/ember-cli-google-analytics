@@ -8,6 +8,7 @@ var googleAnalyticsConfigDefaults = {
   cookieDomain: null,
   cookieName: null,
   cookieExpires: null,
+  enhancedLinkAttr: null,
   displayFeatures: false
 };
 
@@ -30,6 +31,9 @@ function analyticsTrackingCode(config) {
   } else {
     gaConfig = JSON.stringify(gaConfig);
   }
+  var enhancedLink = config.enhancedLinkAttr || function(){
+      return config.globalVariable() + "('require', 'linkid')";  
+    }:"";
 
   scriptArray = [
     "<script>",
@@ -39,6 +43,8 @@ function analyticsTrackingCode(config) {
     "})(window,document,'script','https://www.google-analytics.com/analytics.js','" + config.globalVariable + "');",
     "",
     "" + config.globalVariable + "('create', '" + config.webPropertyId + "', " + gaConfig + ");",
+    "",
+    enhancedLink,
     "</script>"
   ];
 
