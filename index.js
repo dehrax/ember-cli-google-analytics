@@ -33,7 +33,7 @@ function analyticsTrackingCode(config) {
   }
   var enhancedLink = config.enhancedLinkAttr || function(){
       return config.globalVariable() + "('require', 'linkid')";  
-    }:"";
+    }||"";
 
   scriptArray = [
     "<script>",
@@ -58,6 +58,10 @@ function analyticsTrackingCode(config) {
 
 function gaTrackingCode(config) {
   var scriptArray;
+  
+    var enhancedLink = config.enhancedLinkAttr || function(){
+      return config.globalVariable() + "('require', 'linkid')";  
+    }||"";
 
   scriptArray = [
     "<script>",
@@ -70,6 +74,7 @@ function gaTrackingCode(config) {
     "  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';",
     "  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);",
     "})();",
+    enhancedLink,
     "</script>"
   ];
 
