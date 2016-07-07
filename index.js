@@ -8,7 +8,7 @@ var googleAnalyticsConfigDefaults = {
   cookieDomain: null,
   cookieName: null,
   cookieExpires: null,
-  enhancedLinkAttr: null,
+  enhancedLinkAttr: false,
   displayFeatures: false
 };
 
@@ -16,7 +16,7 @@ function analyticsTrackingCode(config) {
   var scriptArray,
       displayFeaturesString,
       gaConfig = {};
-
+      var enhancedLink;
   if (config.cookieDomain != null) {
     gaConfig.cookieDomain = config.cookieDomain;
   }
@@ -26,14 +26,14 @@ function analyticsTrackingCode(config) {
   if (config.cookieExpires != null) {
     gaConfig.cookieExpires = config.cookieExpires;
   }
+  if(config.enhancedLinkAttr){
+    enhancedLink = config.globalVariable + "('require', 'linkid');";
+  }
   if (Object.keys(gaConfig).length === 0) {
     gaConfig = "'auto'";
   } else {
     gaConfig = JSON.stringify(gaConfig);
   }
-  var enhancedLink = config.enhancedLinkAttr || function(){
-      return config.globalVariable() + "('require', 'linkid')";  
-    }:"";
 
   scriptArray = [
     "<script>",
@@ -41,10 +41,9 @@ function analyticsTrackingCode(config) {
     "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),",
     "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)",
     "})(window,document,'script','https://www.google-analytics.com/analytics.js','" + config.globalVariable + "');",
-    "",
     "" + config.globalVariable + "('create', '" + config.webPropertyId + "', " + gaConfig + ");",
     "",
-    enhancedLink,
+    "" + enhancedLink,
     "</script>"
   ];
 
