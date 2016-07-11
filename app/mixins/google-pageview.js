@@ -22,7 +22,6 @@ export default Ember.Mixin.create({
           page: page,
           title: title
         });
-        window[globalVariable]('require', 'linkid');
       } else if (trackerType === 'ga.js') {
         window._gaq.push(['_trackPageview']);
       }
